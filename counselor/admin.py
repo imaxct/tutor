@@ -7,20 +7,34 @@ from .models import *
 
 class OptionInline(admin.StackedInline):
     model = Option
-    extra = 4
+    can_delete = True
+    extra = 0
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['question_text']}),
-        (u'发布日期', {'fields': ['pub_date']})
-    ]
+    list_display = ('id', 'question_text')
     inlines = [OptionInline]
 
 
+class AcademyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'stu_no', 'id_no', 'grade', 'academy')
+
+
+class TeacherAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'academy')
+
+
+class OptionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'question', 'option_num', 'option_text', 'score')
+
+
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Record)
-admin.site.register(Academy)
-admin.site.register(Teacher)
-admin.site.register(Option)
+admin.site.register(Academy, AcademyAdmin)
+admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Option, OptionAdmin)

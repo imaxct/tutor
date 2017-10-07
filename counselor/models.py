@@ -43,8 +43,8 @@ class Question(models.Model):
     """
     问题
     """
-    pub_date = models.DateField
-    question_text = models.TextField
+    pub_date = models.DateField(auto_now=True)
+    question_text = models.TextField(max_length=300, null=True)
 
     def __str__(self):
         return self.question_text
@@ -54,9 +54,10 @@ class Option(models.Model):
     """
     选项
     """
-    score = models.FloatField
-    option_text = models.CharField(max_length=200)
     option_num = models.CharField(max_length=1)
+    option_text = models.CharField(max_length=200)
+    score = models.FloatField(default=0.0)
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='question id')
 
     def __str__(self):
@@ -72,9 +73,7 @@ class Record(models.Model):
     option = models.ForeignKey(Option, on_delete=models.CASCADE, verbose_name='record option')
 
     class Meta:
-        indexes = [
-            models.Index(fields=['user', 'question', 'option'])
-        ]
+        unique_together = ('user', 'question', 'option')
 
     def __str__(self):
         return '%s %s %s' % (self.user.name, self.question.question_text, self.option.option_num)
