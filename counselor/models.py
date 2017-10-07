@@ -4,30 +4,39 @@ from django.db import models
 # Create your models here.
 
 
-class User(models.Model):
+class Academy(models.Model):
     """
-    用户
+    学院
     """
-    username = models.CharField(max_length=20)
-    # TODO add fields
-    pass
-
-
-class Record(models.Model):
-    """
-    记录
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='record user')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='record question')
-    option = models.ForeignKey(Option, on_delete=models.CASCADE, verbose_name='record option')
-
-    class Meta:
-        indexes = [
-            models.Index(fields=[])
-        ]
+    name = models.CharField(max_length=60)
 
     def __str__(self):
-        return '%s %s %s' % (self.user.username, self.question.question_text, self.option.option_num)
+        return self.name
+
+
+class User(models.Model):
+    """
+    学生
+    """
+    name = models.CharField(max_length=20)
+    stu_no = models.CharField(max_length=20)
+    id_no = models.CharField(max_length=20)
+    grade = models.CharField(max_length=10)
+    academy = models.ForeignKey(Academy, verbose_name='user academy')
+
+    def __str__(self):
+        return '%s %s %s' % (self.stu_no, self.name, self.academy.name)
+
+
+class Teacher(models.Model):
+    """
+    教师
+    """
+    name = models.CharField(max_length=20)
+    academy = models.ForeignKey(Academy, verbose_name='teacher academy')
+
+    def __str__(self):
+        return self.name
 
 
 class Question(models.Model):
@@ -52,3 +61,20 @@ class Option(models.Model):
 
     def __str__(self):
         return self.option_text
+
+
+class Record(models.Model):
+    """
+    记录
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='record user')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='record question')
+    option = models.ForeignKey(Option, on_delete=models.CASCADE, verbose_name='record option')
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'question', 'option'])
+        ]
+
+    def __str__(self):
+        return '%s %s %s' % (self.user.name, self.question.question_text, self.option.option_num)

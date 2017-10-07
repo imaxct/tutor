@@ -4,3 +4,11 @@ from django.shortcuts import render
 
 from .controllers.user import *
 from .controllers.admin import *
+
+
+def index():
+    """
+    主页
+    :return:
+    """
+    pass
