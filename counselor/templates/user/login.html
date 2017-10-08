@@ -1,0 +1,6 @@
+<form action="{% url 'user_login' %}" method="post">
+    {% csrf_token %}
+    <input name="stu_no" placeholder="学号">
+    <input name="id_no" placeholder="身份证号">
+    <input type="submit">
+</form>

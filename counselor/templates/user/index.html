@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
+</head>
+<body>
+{% if user.is_authenticated %}
+    {{ csrf_token }}
+{% else %}
+    {% include 'user/login.html' %}
+{% endif %}
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
